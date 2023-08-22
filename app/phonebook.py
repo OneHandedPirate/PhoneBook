@@ -1,4 +1,5 @@
 import os
+import re
 import time
 from typing import Callable
 
@@ -144,12 +145,12 @@ class PhoneBook:
         """Creates search mask for records from passed dict"""
 
         return (
-            records['last_name'].str.lower().str.contains(search_conditions['last_name']) &
-            records['name'].str.lower().str.contains(search_conditions['name']) &
-            records['patronymic'].str.lower().str.contains(search_conditions['patronymic']) &
-            records['company'].str.lower().str.contains(search_conditions['company']) &
-            records['work_ph'].astype(str).str.lower().str.contains(search_conditions['work_ph']) &
-            records['private_ph'].astype(str).str.lower().str.contains(search_conditions['private_ph'])
+                records['last_name'].str.lower().str.contains(re.escape(search_conditions['last_name'])) &
+                records['name'].str.lower().str.contains(re.escape(search_conditions['name'])) &
+                records['patronymic'].str.lower().str.contains(re.escape(search_conditions['patronymic'])) &
+                records['company'].str.lower().str.contains(re.escape(search_conditions['company'])) &
+                records['work_ph'].astype(str).str.lower().str.contains(re.escape(search_conditions['work_ph'])) &
+                records['private_ph'].astype(str).str.lower().str.contains(re.escape(search_conditions['private_ph']))
         )
 
     def search_record(self, page: int = 1) -> None:
