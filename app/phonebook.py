@@ -11,9 +11,10 @@ from render import Render
 class PhoneBook:
     """Main class for phonebook"""
 
+    PER_PAGE: int = 50
+    DB_PATH: str = os.path.join(os.path.dirname(__file__), 'db', 'db.csv')
+
     def __init__(self):
-        self.PER_PAGE: int = 50
-        self.DB_PATH: str = os.path.join(os.path.dirname(__file__), 'db', 'db.csv')
         self.render = Render()
 
     @staticmethod
@@ -177,11 +178,11 @@ class PhoneBook:
             if not search_results.empty:
                 self.display_records(search_results, page, page_start, page_end, total_pages)
             else:
-                print("\nЗаписи не найдены")
+                print("\nЗаписи не найдены\n")
 
+            if not search_results.empty:
+                print('Введите номер страницы для перехода к ней\nили')
             command: str = input(
-                '\nВведите номер страницы для перехода к ней\n'
-                'или\n'
                 'Введите new для нового поиска\n'
                 'или\n'
                 'Х для возврата в гл. меню: '
