@@ -4,7 +4,6 @@ import time
 from typing import Callable
 
 import pandas as pd
-
 from render import Render
 
 
@@ -31,11 +30,11 @@ class PhoneBook:
             self.render.main_menu()
             inpt: str = input('Введите номер желаемого пункта или X для выхода:\n').lower()
             match inpt:
-                case "1":
+                case '1':
                     self.get_records_list()
-                case "2":
+                case '2':
                     self.append_db()
-                case "3":
+                case '3':
                     self.search_record()
                 case 'x' | 'х':
                     exit()
@@ -48,7 +47,7 @@ class PhoneBook:
     def validate_name(name: str) -> bool:
         """Validate names"""
 
-        return name.isalpha() and name
+        return bool(name.isalpha() and name)
 
     @staticmethod
     def validate_number(number: str) -> bool:
@@ -56,7 +55,7 @@ class PhoneBook:
 
         return number.isdigit() and len(number) >= 6
 
-    def get_validated_value(self, prompt: str, validator: Callable = None) -> str:
+    def get_validated_value(self, prompt: str, validator: None | Callable = None) -> str:
         """
         Validate the value according to passed validator.
         If no validator passed the value will be returned as is
@@ -75,7 +74,7 @@ class PhoneBook:
             else:
                 return value
 
-    def display_records(self, records, page,  page_start, page_end, total_pages) -> None:
+    def display_records(self, records, page, page_start, page_end, total_pages) -> None:
         """Display the records"""
 
         self.render.headers()
@@ -104,11 +103,11 @@ class PhoneBook:
             self.display_records(records, page, page_start, page_end, total_pages)
 
             temp: str = input(
-                "Введите номер страницы для перехода к ней\n"
-                "или\n"
-                "edit {номер записи} для ее редактирования\n"
-                "или\n"
-                "X для возврата в гл. меню: "
+                'Введите номер страницы для перехода к ней\n'
+                'или\n'
+                'edit {номер записи} для ее редактирования\n'
+                'или\n'
+                'X для возврата в гл. меню: '
             )
 
             if temp.lower() in ('x', 'х'):
@@ -125,12 +124,12 @@ class PhoneBook:
     def get_search_conditions() -> dict:
         """Form search conditions"""
 
-        last_name = input("Введите фамилию (или оставьте пустым): ").lower()
-        name = input("Введите имя (или оставьте пустым): ").lower()
-        patronymic = input("Введите отчество (или оставьте пустым): ").lower()
-        company = input("Введите название компании (или оставьте пустым): ").lower()
-        work_ph = input("Введите рабочий телефон (или оставьте пустым): ").lower()
-        private_ph = input("Введите личный телефон (или оставьте пустым): ").lower()
+        last_name = input('Введите фамилию (или оставьте пустым): ').lower()
+        name = input('Введите имя (или оставьте пустым): ').lower()
+        patronymic = input('Введите отчество (или оставьте пустым): ').lower()
+        company = input('Введите название компании (или оставьте пустым): ').lower()
+        work_ph = input('Введите рабочий телефон (или оставьте пустым): ').lower()
+        private_ph = input('Введите личный телефон (или оставьте пустым): ').lower()
 
         return {
             'last_name': last_name,
@@ -146,12 +145,12 @@ class PhoneBook:
         """Creates search mask for records from passed dict"""
 
         return (
-                records['last_name'].str.lower().str.contains(re.escape(search_conditions['last_name'])) &
-                records['name'].str.lower().str.contains(re.escape(search_conditions['name'])) &
-                records['patronymic'].str.lower().str.contains(re.escape(search_conditions['patronymic'])) &
-                records['company'].str.lower().str.contains(re.escape(search_conditions['company'])) &
-                records['work_ph'].astype(str).str.lower().str.contains(re.escape(search_conditions['work_ph'])) &
-                records['private_ph'].astype(str).str.lower().str.contains(re.escape(search_conditions['private_ph']))
+            records['last_name'].str.lower().str.contains(re.escape(search_conditions['last_name']))
+            & records['name'].str.lower().str.contains(re.escape(search_conditions['name']))
+            & records['patronymic'].str.lower().str.contains(re.escape(search_conditions['patronymic']))
+            & records['company'].str.lower().str.contains(re.escape(search_conditions['company']))
+            & records['work_ph'].astype(str).str.lower().str.contains(re.escape(search_conditions['work_ph']))
+            & records['private_ph'].astype(str).str.lower().str.contains(re.escape(search_conditions['private_ph']))
         )
 
     def search_record(self, page: int = 1) -> None:
@@ -178,7 +177,7 @@ class PhoneBook:
             if not search_results.empty:
                 self.display_records(search_results, page, page_start, page_end, total_pages)
             else:
-                print("\nЗаписи не найдены\n")
+                print('\nЗаписи не найдены\n')
 
             if not search_results.empty:
                 print('Введите номер страницы для перехода к ней\nили')
@@ -279,7 +278,7 @@ class PhoneBook:
 
         try:
             edited_record: list = self.set_record('изменена')
-            records.iloc[to_edit-1] = edited_record
+            records.iloc[to_edit - 1] = edited_record
             records.to_csv(self.DB_PATH, index=True, sep='|', header=False)
 
             self.sort_db()
@@ -288,4 +287,3 @@ class PhoneBook:
             print(e)
 
         self.main_menu()
-
