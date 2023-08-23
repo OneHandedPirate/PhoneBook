@@ -45,7 +45,7 @@
   - активировать виртуальное окружение `poetry`:<br>
     `poetry shell`
   - установить зависимости:<br>
-    `poetry install`
+    `poetry install --without dev`
 - Если вы не используете `poetry`:
   - создайте виртуальное окружение:<br>
     `virtualenv venv`
